@@ -20,7 +20,7 @@ def recive():
 def clear():
     subprocess.call('cmd.exe /c cls')
 def help():
-    print("-h/help: Show all option that you can use\nshow: Show all settings of connection\n-g/generate: Show generating payload menu\nset [OPTION_NAME]: set the option of connection\n-l/listen: Shwo listening optiion\nrun/execute: execute")
+    print("-h/help: Show all option that you can use\nshow: Show all settings of connection\n-g/generate: Show generating payload menu\nset [OPTION_NAME]: set the option of connection\n-l/listen: Show listening optiion\nrun/execute: execute")
 def listen_help():
     print("info: get information about target\ncwd: get current directory\nls: list directory\ncd: change directory EX: cd ../ cd [directory_name]\nuser: show user pemission\nget [File_Name]: get the file from target\n")
 def get_file(file_name):
@@ -44,7 +44,7 @@ print("Welcome To GCOTT\n This tool is for taking control of the target\n Please
 while True:
     chapter = input("GCOTT -> ")
     if chapter == "help" or chapter ==  "-h":
-        print("hell")
+        print("help")
         help()
     if chapter =="listen" or chapter ==  "-l":
         host_ip = socket.gethostbyname(socket.gethostname())
