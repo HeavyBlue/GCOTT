@@ -24,7 +24,8 @@ def receive():
 
 
 def clear():
-    subprocess.call('cmd.exe /c cls')
+    cmd_ = "cls" if os.name == "nt" else "clear"
+    os.system(cmd_)
 
 
 def help():
