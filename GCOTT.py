@@ -107,8 +107,9 @@ while True:
         host_port = 5555
         print("\nListening Mode Activate on ", host_ip, ":", host_port)
         print("You can change the host ip and port with set option and then execute\n")
+        listen_sign = colored("Listen", "red")
         while True:
-            option = input("GCOTT -> ")
+            option = input("GCOTT@"+listen_sign+ " -> ")
             if option == "show":
                 print("\n--------------------------\nHost_IP: ", host_ip, "\n--------------------------\nHost_Port: ",
                       host_port, "\n--------------------------\n")
