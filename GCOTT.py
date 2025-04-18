@@ -157,6 +157,7 @@ class GCOTT:
                     command = input(f"{target_ip_colored}@{colored('GCOTT', 'green')}-> ")
                     if command == "help" or command == "-h":
                         self.display_listen_help()
+                        continue
                     elif not command:
                         break
                     try:
