@@ -1,4 +1,4 @@
-# 🔱 GCOTT - Advanced Remote Administration Framework 🔱 
+# 🔱 GCOTT - Get Control Of The Target 🔱 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-cyan.svg)](https://opensource.org/licenses/MIT)
 [![Python: 3.12+](https://img.shields.io/badge/Python-3.12+-blueviolet.svg)](https://www.python.org/downloads/)
