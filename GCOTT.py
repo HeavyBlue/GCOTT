@@ -5,8 +5,8 @@ import gzip
 import base64
 import socket
 import pickle
+from typing import Any
 
-from art import *
 from termcolor import colored
 from password import PasswordCracker
 
@@ -24,21 +24,40 @@ class GCOTT:
         self.print_banner()
 
     def print_banner(self):
-        ascii_art = text2art("GCOTT")
-        print(ascii_art)
-        print('Welcome To GCOTT\n'
-              'This tool is for taking control of the target\n'
-              'PLEASE USE THIS TOOL IF ONLY YOU HAVE PERMISSION!\n\n\n'
-              'You can see option with -help or -h\n\n')
+        ascii_art = """
+ ░▒▓██████▓▒░ ░▒▓██████▓▒░ ░▒▓██████▓▒░▒▓████████▓▒░▒▓████████▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
+░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
+░▒▓█▓▒▒▓███▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
+ ░▒▓██████▓▒░ ░▒▓██████▓▒░ ░▒▓██████▓▒░  ░▒▓█▓▒░      ░▒▓█▓▒░     
+"""
+        self.gprint(ascii_art)
+        print('Welcome To GCOTT')
+        print('This tool is for taking control of the target')
+        print('PLEASE USE THIS TOOL IF ONLY YOU HAVE PERMISSION!')
+        print('You can see option with help or -h')
+
+    def rprint(self, obj: Any) -> None:
+        print(colored(obj, 'red'))
+
+    def gprint(self, obj: Any) -> None:
+        print(colored(obj, 'green'))
 
     def clear(self):
         cmd_ = "cls" if os.name == "nt" else "clear"
         os.system(cmd_)
 
     def display_help(self):
-        print('-h/help: Show all option that you can use\nshow: Show all settings of connection\n-g/generate: Show '
-              'generating payload menu\nset [OPTION_NAME]: set the option of connection\n-l/listen: Show listening '
-              'option\nrun/execute: execute')
+        print('help: Show all option that you can use')
+        print('show: Show all settings of connection')
+        print('generate: Show generating payload menu')
+        print('set [OPTION_NAME]: set the option of connection')
+        print('listen: Show listening option')
+        print('clear: Clear the screen')
+        print('run: Execute')
+        print('quit: Quit')
 
     def display_listen_help(self):
         print(
@@ -302,18 +321,22 @@ class GCOTT:
         self.target_connection = None
         self.target = None
         print(colored("[*] Connection closed.", "blue"))
+        exit(0)
 
     def run(self):
         while True:
-            chapter = input("GCOTT -> ")
-            if chapter == "help" or chapter == "-h":
+            print(colored("GCOTT$ ", 'red'), end="")
+            chapter = input().lower()
+            if chapter == "help":
                 self.display_help()
-            elif chapter == "listen" or chapter == "-l":
+            elif chapter == "listen":
                 self.handle_listen_mode()
-            elif chapter == "password" or chapter == "-p":
+            elif chapter == "password":
                 self.handle_password_cracker()
-            elif chapter == "generate" or chapter == "-g":
+            elif chapter == "generate":
                 self.handle_payload_generator()
+            elif chapter == "clear":
+                self.clear()
             elif chapter == "q" or chapter == "quit":
                 print("Quitting...")
                 self.close_connection()
@@ -322,4 +345,13 @@ class GCOTT:
 
 if __name__ == "__main__":
     gcott = GCOTT()
-    gcott.run()
+    try:
+        gcott.run()
+    except KeyboardInterrupt:
+        print("Quitting...")
+        gcott.close_connection()
+        exit(0)
+    except EOFError:
+        print("Quitting...")
+        gcott.close_connection()
+        exit(0)
