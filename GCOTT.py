@@ -1,12 +1,8 @@
 import os
-import json
-import time
 import gzip
-import base64
 import socket
 import pickle
 
-from art import *
 from termcolor import colored
 from password import PasswordCracker
 
@@ -24,31 +20,51 @@ class GCOTT:
         self.print_banner()
 
     def print_banner(self):
-        ascii_art = text2art("GCOTT")
+        ascii_art = """
+  .oooooo.      .oooooo.     .oooooo.   ooooooooooooo ooooooooooooo 
+ d8P'  `Y8b    d8P'  `Y8b   d8P'  `Y8b  8'   888   `8 8'   888   `8 
+888           888          888      888      888           888      
+888           888          888      888      888           888      
+888     ooooo 888          888      888      888           888      
+`88.    .88'  `88b    ooo  `88b    d88'      888           888      
+ `Y8bood8P'    `Y8bood8P'   `Y8bood8P'      o888o         o888o     
+
+"""
         print(ascii_art)
-        print('Welcome To GCOTT\n'
-              'This tool is for taking control of the target\n'
-              'PLEASE USE THIS TOOL IF ONLY YOU HAVE PERMISSION!\n\n\n'
-              'You can see option with -help or -h\n\n')
+        print('Welcome To GCOTT')
+        print('This tool is for taking control of the target')
+        print('PLEASE USE THIS TOOL IF ONLY YOU HAVE PERMISSION!')
+        print('You can see option with help or -h')
 
     def clear(self):
         cmd_ = "cls" if os.name == "nt" else "clear"
         os.system(cmd_)
 
     def display_help(self):
-        print('-h/help: Show all option that you can use\nshow: Show all settings of connection\n-g/generate: Show '
-              'generating payload menu\nset [OPTION_NAME]: set the option of connection\n-l/listen: Show listening '
-              'option\nrun/execute: execute')
+        print('help: Show all option that you can use')
+        print('show: Show all settings of connection')
+        print('generate: Show generating payload menu')
+        print('set [OPTION_NAME]: set the option of connection')
+        print('listen: Show listening option')
+        print('clear: Clear the screen')
+        print('run: Execute')
+        print('quit: Quit')
 
     def display_listen_help(self):
-        print(
-            'info: get information about target\ncwd: get current directory\nls: list directory\ncd: change directory '
-            'EX: cd ../ cd [directory_name]\nuser: show user permission\nget [File_Name]: get the file from target\n')
+        print('info: get information about target')
+        print('cwd: get current directory')
+        print('ls: list directory')
+        print('cd: change directory')
+        print('EX: cd ../ cd [directory_name]')
+        print('user: show user permission')
+        print('get [File_Name]: get the file from target')
 
     def display_payload_help(self):
-        print('-l: List to All Payloads\nset [Payload_Name]/[Payload_Option]: set the payload(Ex. set reverseShell.py /'
-              'set host_ip 1.1.1.1)\nshow: shows the payload options(eg: ip,port)\n-g/generate: generates payload with '
-              'options\n-q/quit: quit the payload menu')
+        print('-l: List to All Payloads')
+        print('set [Payload_Name]/[Payload_Option]: set the payload(Ex. set reverseShell.py set host_ip 1.1.1.1)')
+        print('show: shows the payload options(eg: ip,port)')
+        print('-g/generate: generates payload with options')
+        print('-q/quit: quit the payload menu')
 
     def listen(self, ip, port):
         self.target_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -302,24 +318,40 @@ class GCOTT:
         self.target_connection = None
         self.target = None
         print(colored("[*] Connection closed.", "blue"))
+        exit(0)
 
     def run(self):
         while True:
-            chapter = input("GCOTT -> ")
-            if chapter == "help" or chapter == "-h":
+            print(colored("GCOTT$ ", 'red'), end="")
+            chapter = input().lower()
+            if chapter == "help":
                 self.display_help()
-            elif chapter == "listen" or chapter == "-l":
+            elif chapter == "listen":
                 self.handle_listen_mode()
-            elif chapter == "password" or chapter == "-p":
+            elif chapter == "password":
                 self.handle_password_cracker()
-            elif chapter == "generate" or chapter == "-g":
+            elif chapter == "generate":
                 self.handle_payload_generator()
+            elif chapter == "clear":
+                self.clear()
             elif chapter == "q" or chapter == "quit":
                 print("Quitting...")
                 self.close_connection()
                 break
+            else:
+                print("Invalid command!")
+                continue
 
 
 if __name__ == "__main__":
     gcott = GCOTT()
-    gcott.run()
+    try:
+        gcott.run()
+    except KeyboardInterrupt:
+        print("Quitting...")
+        gcott.close_connection()
+        exit(0)
+    except EOFError:
+        print("Quitting...")
+        gcott.close_connection()
+        exit(0)
