@@ -1,11 +1,7 @@
 import os
-import json
-import time
 import gzip
-import base64
 import socket
 import pickle
-from typing import Any
 
 from termcolor import colored
 from password import PasswordCracker
@@ -25,25 +21,20 @@ class GCOTT:
 
     def print_banner(self):
         ascii_art = """
- ░▒▓██████▓▒░ ░▒▓██████▓▒░ ░▒▓██████▓▒░▒▓████████▓▒░▒▓████████▓▒░ 
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
-░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
-░▒▓█▓▒▒▓███▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
-░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░ ░▒▓█▓▒░      ░▒▓█▓▒░     
- ░▒▓██████▓▒░ ░▒▓██████▓▒░ ░▒▓██████▓▒░  ░▒▓█▓▒░      ░▒▓█▓▒░     
+  .oooooo.      .oooooo.     .oooooo.   ooooooooooooo ooooooooooooo 
+ d8P'  `Y8b    d8P'  `Y8b   d8P'  `Y8b  8'   888   `8 8'   888   `8 
+888           888          888      888      888           888      
+888           888          888      888      888           888      
+888     ooooo 888          888      888      888           888      
+`88.    .88'  `88b    ooo  `88b    d88'      888           888      
+ `Y8bood8P'    `Y8bood8P'   `Y8bood8P'      o888o         o888o     
+
 """
-        self.gprint(ascii_art)
+        print(ascii_art)
         print('Welcome To GCOTT')
         print('This tool is for taking control of the target')
         print('PLEASE USE THIS TOOL IF ONLY YOU HAVE PERMISSION!')
         print('You can see option with help or -h')
-
-    def rprint(self, obj: Any) -> None:
-        print(colored(obj, 'red'))
-
-    def gprint(self, obj: Any) -> None:
-        print(colored(obj, 'green'))
 
     def clear(self):
         cmd_ = "cls" if os.name == "nt" else "clear"
@@ -60,14 +51,20 @@ class GCOTT:
         print('quit: Quit')
 
     def display_listen_help(self):
-        print(
-            'info: get information about target\ncwd: get current directory\nls: list directory\ncd: change directory '
-            'EX: cd ../ cd [directory_name]\nuser: show user permission\nget [File_Name]: get the file from target\n')
+        print('info: get information about target')
+        print('cwd: get current directory')
+        print('ls: list directory')
+        print('cd: change directory')
+        print('EX: cd ../ cd [directory_name]')
+        print('user: show user permission')
+        print('get [File_Name]: get the file from target')
 
     def display_payload_help(self):
-        print('-l: List to All Payloads\nset [Payload_Name]/[Payload_Option]: set the payload(Ex. set reverseShell.py /'
-              'set host_ip 1.1.1.1)\nshow: shows the payload options(eg: ip,port)\n-g/generate: generates payload with '
-              'options\n-q/quit: quit the payload menu')
+        print('-l: List to All Payloads')
+        print('set [Payload_Name]/[Payload_Option]: set the payload(Ex. set reverseShell.py set host_ip 1.1.1.1)')
+        print('show: shows the payload options(eg: ip,port)')
+        print('-g/generate: generates payload with options')
+        print('-q/quit: quit the payload menu')
 
     def listen(self, ip, port):
         self.target_connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -341,6 +338,9 @@ class GCOTT:
                 print("Quitting...")
                 self.close_connection()
                 break
+            else:
+                print("Invalid command!")
+                continue
 
 
 if __name__ == "__main__":
