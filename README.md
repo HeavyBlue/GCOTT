@@ -1,4 +1,4 @@
-# GCOTT - Get Control Of The Target
+# GCoTT - Get Control Of The Target
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-cyan.svg)](https://opensource.org/licenses/MIT)
 [![Python: 3.12+](https://img.shields.io/badge/Python-3.12+-blueviolet.svg)](https://www.python.org/downloads/)
@@ -7,7 +7,7 @@
 
 ## Overview
 
-**GCOTT** (pronounced "jee-cott") is a command and control framework designed for security professionals and system administrators. It enables authorized users to establish secure connections to remote systems for command execution, file transfer, and system management.
+**GCoTT** is "Get Control of The Target Terminal". It enables authorized users to establish secure connections to remote systems for command execution, file transfer, and system management.
 
 > **IMPORTANT**: This tool is intended for authorized security assessments and legitimate system administration only. Unauthorized use is strictly prohibited and may be illegal.
 
@@ -151,7 +151,6 @@ This project is licensed under the MIT License.
 
 ## Acknowledgements
 
-- The `art` library for ASCII banner generation
 - The `termcolor` library for terminal output coloring
 - The `pyautogui` library for screenshot capabilities
 
