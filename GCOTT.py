@@ -254,8 +254,6 @@ class GCOTT:
         payload_sign = colored("Payload", "red")
         host_ip = ""
         host_port = 5555
-        edited_payload = []
-        payload_name = None
 
         while True:
             user_input = input(f"GCOTT@{payload_sign} -> ")
@@ -322,7 +320,7 @@ class GCOTT:
 
     def run(self):
         while True:
-            print(colored("GCOTT$ ", 'red'), end="")
+            print(colored("GCOTT$ ", (199, 0, 57)), end="")
             chapter = input().lower()
             if chapter == "help":
                 self.display_help()
